@@ -396,7 +396,14 @@ onValue(stadRef, (snapshot) => {
 
 async function save(path, val){
   saving = true;
-  try { await update(ref(db, 'stad'), { [path]: val }); setSyncStatus('ok'); }
+  try {
+    if(val === null){
+      await set(ref(db, 'stad/' + path), null);
+    } else {
+      await set(ref(db, 'stad/' + path), val);
+    }
+    setSyncStatus('ok');
+  }
   catch(e){ setSyncStatus('err'); }
   saving = false;
 }
